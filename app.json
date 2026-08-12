@@ -1,25 +1,72 @@
 {
   "expo": {
-    "name": "MobileGame",
-    "slug": "MobileGame",
+    "name": "ColorSpark",
+    "slug": "colorspark",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "ios": {
-      "supportsTablet": true
+    "scheme": "com.colorspark.app",
+
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFDF5"
     },
+
+    "ios": {
+      "bundleIdentifier": "com.colorspark.app",
+      "buildNumber": "1",
+      "supportsTablet": false,
+      "requireFullScreen": true,
+      "deploymentTarget": "16.4",
+      "infoPlist": {
+        "CFBundleDisplayName": "ColorSpark",
+        "UIRequiresFullScreen": true,
+        "UIStatusBarStyle": "UIStatusBarStyleDefault",
+        "NSUserTrackingUsageDescription": "This app does not track you."
+      },
+      "privacyManifests": {
+        "NSPrivacyAccessedAPITypes": [
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+          }
+        ]
+      }
+    },
+
     "android": {
+      "package": "com.colorspark.app",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "allowBackup": false,
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ]
     },
+
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+
+    "plugins": [
+      "expo-audio"
+    ],
+
+    "extra": {
+      "eas": {
+        "projectId": "YOUR_EAS_PROJECT_ID"
+      }
     }
   }
 }
