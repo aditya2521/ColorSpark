@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Platform } from 'react-native';
 import { createAudioPlayer, setAudioModeAsync, AudioPlayer } from 'expo-audio';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constants from 'expo-constants';
 
 const SOUND_KEY = '@game_sound_enabled_v1';
 
-// iOS Simulator has no audio hardware — skip all audio to avoid CoreAudio log spam
-const AUDIO_SUPPORTED = Constants.isDevice;
+// Skip audio only on web; simulator + device both support audio
+const AUDIO_SUPPORTED = Platform.OS !== 'web';
+
+type SoundSource = Parameters<typeof createAudioPlayer>[0];
+
+const CORRECT_SRC:  SoundSource = require('../../assets/sounds/correct.wav');
+const WRONG_SRC:    SoundSource = require('../../assets/sounds/wrong.wav');
+const COMPLETE_SRC: SoundSource = require('../../assets/sounds/complete.wav');
 
 export function useSoundEffects() {
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -20,12 +26,13 @@ export function useSoundEffects() {
       if (val !== null) setSoundEnabled(val === 'true');
     });
 
-    if (!AUDIO_SUPPORTED) return; // skip on simulator
+    if (!AUDIO_SUPPORTED) return;
 
     setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
-    correctRef.current  = createAudioPlayer(require('../../assets/sounds/correct.wav'));
-    wrongRef.current    = createAudioPlayer(require('../../assets/sounds/wrong.wav'));
-    completeRef.current = createAudioPlayer(require('../../assets/sounds/complete.wav'));
+
+    correctRef.current  = createAudioPlayer(CORRECT_SRC);
+    wrongRef.current    = createAudioPlayer(WRONG_SRC);
+    completeRef.current = createAudioPlayer(COMPLETE_SRC);
 
     return () => {
       correctRef.current?.remove();
@@ -34,16 +41,20 @@ export function useSoundEffects() {
     };
   }, []);
 
-  const play = useCallback((ref: React.MutableRefObject<AudioPlayer | null>) => {
-    if (!soundEnabled || !ref.current) return;
-    try { ref.current.seekTo(0); ref.current.play(); } catch {}
+  // replace() resets position to 0 synchronously — avoids async seekTo race with re-renders
+  const play = useCallback((ref: React.MutableRefObject<AudioPlayer | null>, src: SoundSource) => {
+    if (!soundEnabled || !ref.current || !src) return;
+    try {
+      ref.current.replace(src);
+      ref.current.play();
+    } catch {}
   }, [soundEnabled]);
 
   return {
     soundEnabled,
-    playCorrect:  () => play(correctRef),
-    playWrong:    () => play(wrongRef),
-    playComplete: () => play(completeRef),
+    playCorrect:  () => play(correctRef, CORRECT_SRC),
+    playWrong:    () => play(wrongRef, WRONG_SRC),
+    playComplete: () => play(completeRef, COMPLETE_SRC),
     toggleSound: () => {
       setSoundEnabled(prev => {
         const next = !prev;

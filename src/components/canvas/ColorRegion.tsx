@@ -12,8 +12,8 @@ interface ColorRegionProps {
 
 const FLASH_COLOR = '#FF4444';
 const HINT_STROKE = '#FF6B00';
-const DEFAULT_STROKE = '#333333';
-const STROKE_WIDTH = 2;
+const DEFAULT_STROKE = '#1E293B';
+const STROKE_WIDTH = 1.5;
 const HINT_STROKE_WIDTH = 3.5;
 
 export default function ColorRegion({
@@ -23,9 +23,20 @@ export default function ColorRegion({
   isHinted,
   onPress,
 }: ColorRegionProps) {
-  const fill = isFlashing ? FLASH_COLOR : (isHinted ? '#FFF5E0' : fillColor);
-  const stroke = isHinted ? HINT_STROKE : DEFAULT_STROKE;
-  const strokeWidth = isHinted ? HINT_STROKE_WIDTH : STROKE_WIDTH;
+  const fill = isFlashing
+    ? FLASH_COLOR
+    : isHinted
+    ? '#FFF5E0'
+    : fillColor;
+
+  const stroke = isHinted
+    ? HINT_STROKE
+    : DEFAULT_STROKE;
+
+  const strokeWidth = isHinted
+    ? HINT_STROKE_WIDTH
+    : STROKE_WIDTH;
+
   const { shape } = region;
 
   const commonProps = {
@@ -39,8 +50,10 @@ export default function ColorRegion({
     case 'rect':
       return (
         <Rect
-          x={shape.x} y={shape.y}
-          width={shape.w} height={shape.h}
+          x={shape.x}
+          y={shape.y}
+          width={shape.w}
+          height={shape.h}
           rx={shape.rx ?? 0}
           {...commonProps}
         />

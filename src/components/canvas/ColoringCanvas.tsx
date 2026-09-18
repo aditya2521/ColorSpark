@@ -19,6 +19,7 @@ interface Props {
   filledRegions: Record<string, number>;
   flashRegion: string | null;
   hintRegion: string | null;
+  selectedColorNumber: number | null;
   onRegionPress: (regionId: string) => void;
   onZoomIn: () => void;
   onZoomOut: () => void;
@@ -35,6 +36,7 @@ export default function ColoringCanvas({
   filledRegions,
   flashRegion,
   hintRegion,
+  selectedColorNumber,
   onRegionPress,
   zoomControls,
 }: Props) {
@@ -196,28 +198,54 @@ export default function ColoringCanvas({
                 />
               ))}
 
-              {/* Pass 2 – number badges always on top */}
+              {/* Pass 2 – number badges with circle border */}
               {level.template.regions.map(region => {
                 if (filledRegions[region.id] !== undefined) return null;
                 const isHinted = hintRegion === region.id;
+                const isMatchingSelected = selectedColorNumber !== null && region.colorNumber === selectedColorNumber;
+
                 const isDouble = region.colorNumber >= 10;
-                const rx = isHinted ? (isDouble ? 17 : 14) : (isDouble ? 14 : 11);
-                const ry = isHinted ? 13 : 11;
+                const rx = isHinted ? (isDouble ? 16 : 13) : (isDouble ? 13 : 10.5);
+                const ry = isHinted ? 13 : 10.5;
+
+                const badgeBorder = isHinted
+                  ? '#FF6B00'
+                  : isMatchingSelected
+                  ? '#6366F1'
+                  : '#1E293B';
+
+                const badgeFill = isHinted
+                  ? '#FFF3CD'
+                  : isMatchingSelected
+                  ? '#EEF2FF'
+                  : '#FFFFFF';
+
+                const textFill = isHinted
+                  ? '#FF6B00'
+                  : isMatchingSelected
+                  ? '#4338CA'
+                  : '#0F172A';
+
                 return (
                   <G key={`lbl-${region.id}`} onPress={() => onRegionPress(region.id)}>
                     <Ellipse
-                      cx={region.label[0]} cy={region.label[1]}
-                      rx={rx} ry={ry}
-                      fill="white" fillOpacity={0.96}
-                      stroke={isHinted ? '#FF6B00' : '#2A2A2A'}
-                      strokeWidth={isHinted ? 2 : 1.5}
+                      cx={region.label[0]}
+                      cy={region.label[1]}
+                      rx={rx}
+                      ry={ry}
+                      fill={badgeFill}
+                      fillOpacity={0.96}
+                      stroke={badgeBorder}
+                      strokeWidth={isHinted || isMatchingSelected ? 2 : 1.3}
                     />
                     <SvgText
-                      x={region.label[0]} y={region.label[1]}
+                      x={region.label[0]}
+                      y={region.label[1]}
                       fontSize={isHinted ? '13' : (isDouble ? '10' : '11')}
                       fontWeight="bold"
-                      fill={isHinted ? '#FF6B00' : '#111111'}
-                      textAnchor="middle" alignmentBaseline="middle"
+                      fill={textFill}
+                      textAnchor="middle"
+                      alignmentBaseline="middle"
                     >
                       {region.colorNumber}
                     </SvgText>

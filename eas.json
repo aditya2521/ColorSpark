@@ -5,7 +5,7 @@
   },
   "build": {
     "development": {
-      "developmentClient": true,
+      "developmentClient": false,
       "distribution": "internal",
       "ios": { "simulator": false },
       "android": { "buildType": "apk" }
@@ -17,10 +17,12 @@
     },
     "production": {
       "ios": {
-        "image": "latest"
+        "image": "latest",
+        "autoIncrement": true
       },
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "autoIncrement": true
       }
     }
   },
@@ -29,12 +31,15 @@
       "ios": {
         "appleId": "YOUR_APPLE_ID_EMAIL",
         "ascAppId": "YOUR_APP_STORE_CONNECT_APP_ID",
-        "appleTeamId": "YOUR_APPLE_TEAM_ID"
+        "appleTeamId": "YOUR_APPLE_TEAM_ID",
+        "language": "en-US",
+        "sku": "com.colorspark.app"
       },
       "android": {
         "serviceAccountKeyPath": "./google-service-account.json",
         "track": "production",
-        "releaseStatus": "draft"
+        "releaseStatus": "draft",
+        "changesNotSentForReview": false
       }
     }
   }

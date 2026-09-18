@@ -2,43 +2,43 @@
   "expo": {
     "name": "ColorSpark",
     "slug": "colorspark",
-    "version": "1.0.0",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "com.colorspark.app",
-
+    "description": "ColorSpark is a fun color-by-number game with 200 unique images, 40+ vibrant palettes, and 4 difficulty tiers. Perfect for kids and adults. No ads, no in-app purchases — free to play!",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#FFFDF5"
     },
-
     "ios": {
       "bundleIdentifier": "com.colorspark.app",
-      "buildNumber": "1",
-      "supportsTablet": false,
+      "buildNumber": "3",
+      "supportsTablet": true,
       "requireFullScreen": true,
       "deploymentTarget": "16.4",
       "infoPlist": {
         "CFBundleDisplayName": "ColorSpark",
         "UIRequiresFullScreen": true,
         "UIStatusBarStyle": "UIStatusBarStyleDefault",
-        "NSUserTrackingUsageDescription": "This app does not track you."
+"ITSAppUsesNonExemptEncryption": false
       },
       "privacyManifests": {
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
           }
         ]
       }
     },
-
     "android": {
-      "package": "com.colorspark.app",
-      "versionCode": 1,
+      "package": "com.colorspark.matchblend",
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
@@ -54,19 +54,21 @@
         "android.permission.ACCESS_COARSE_LOCATION"
       ]
     },
-
     "web": {
       "favicon": "./assets/favicon.png"
     },
-
     "plugins": [
       "expo-audio"
     ],
-
     "extra": {
+      "privacyPolicyUrl": "https://colorspark-21.web.app/privacy",
+      "termsUrl": "https://colorspark-21.web.app/terms",
+      "supportUrl": "https://colorspark-21.web.app",
+      "supportEmail": "aditya159121@gmail.com",
       "eas": {
-        "projectId": "YOUR_EAS_PROJECT_ID"
+        "projectId": "ad72fed8-9593-46c2-8ae3-ee1cdf000b16"
       }
-    }
+    },
+    "owner": "aditya2125"
   }
 }

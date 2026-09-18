@@ -1,11 +1,13 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ColorSlot } from '../../types';
+import { ColorSlot, LevelMode } from '../../types';
+import { IS_TABLET, ms } from '../../utils/responsive';
 
 interface ColorPaletteProps {
   colorSlots: ColorSlot[];
   selectedNumber: number | null;
   filledNumbers: Set<number>;
+  mode?: LevelMode;
   onSelect: (number: number) => void;
 }
 
@@ -15,6 +17,7 @@ export default function ColorPalette({
   colorSlots,
   selectedNumber,
   filledNumbers,
+  mode = 'classic',
   onSelect,
 }: ColorPaletteProps) {
   const insets = useSafeAreaInsets();
@@ -41,7 +44,7 @@ export default function ColorPalette({
           contentContainerStyle={styles.scroll}
           bounces={false}
         >
-          {colorSlots.map(slot => {
+          {colorSlots.map((slot) => {
             const isSelected = selectedNumber === slot.number;
             const isDone = filledNumbers.has(slot.number);
             const main = slot.color;
@@ -75,7 +78,13 @@ export default function ColorPalette({
                   ]}
                 >
                   {/* Top face */}
-                  <View style={[styles.face, { backgroundColor: main }, isSelected && styles.faceSelected]}>
+                  <View
+                    style={[
+                      styles.face,
+                      { backgroundColor: main },
+                      isSelected && styles.faceSelected,
+                    ]}
+                  >
                     {/* Shine */}
                     <View style={[styles.shine, { backgroundColor: highlight + 'CC' }]} />
 
@@ -127,8 +136,8 @@ function getContrastColor(hex: string): string {
 
 // ─── constants ────────────────────────────────────────────────────────────────
 
-const PILL_W = 64;
-const PILL_H = 64;
+const PILL_W = IS_TABLET ? 96 : 64;
+const PILL_H = IS_TABLET ? 96 : 64;
 const FACE_INSET = 5;
 const FACE_W = PILL_W - FACE_INSET;
 const FACE_H = PILL_H - FACE_INSET;
@@ -166,10 +175,12 @@ const styles = StyleSheet.create({
   },
   scroll: {
     paddingHorizontal: 16,
-    gap: 12,
+    gap: IS_TABLET ? 16 : 12,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 6,
+    justifyContent: 'center',
+    paddingVertical: IS_TABLET ? 10 : 6,
+    minWidth: '100%',
   },
 
   swatchOuter: {
@@ -234,7 +245,7 @@ const styles = StyleSheet.create({
   },
 
   num: {
-    fontSize: 22,
+    fontSize: ms(22),
     fontWeight: '900',
     letterSpacing: -0.5,
     textShadowColor: 'rgba(0,0,0,0.25)',
@@ -243,17 +254,17 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   numSelected: {
-    fontSize: 24,
+    fontSize: ms(24),
   },
 
   check: {
-    fontSize: 26,
+    fontSize: ms(26),
     fontWeight: '900',
     zIndex: 2,
   },
 
   label: {
-    fontSize: 10,
+    fontSize: ms(10),
     color: '#9B72CF',
     fontWeight: '700',
     width: PILL_W + 10,
@@ -263,6 +274,12 @@ const styles = StyleSheet.create({
   labelSelected: {
     color: '#6B21A8',
     fontWeight: '900',
-    fontSize: 11,
+    fontSize: ms(11),
+  },
+  swatchOuterLocked: {
+    opacity: 0.45,
+  },
+  lockIcon: {
+    fontSize: ms(16),
   },
 });

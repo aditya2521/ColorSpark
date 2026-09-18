@@ -1,5 +1,9 @@
 export type Difficulty = 'easy' | 'medium' | 'hard' | 'expert';
 
+export type LevelMode = 'classic' | 'masterpiece';
+
+export type BoosterType = 'splash' | 'radar' | 'wand' | 'hint';
+
 export type ShapeKind = 'path' | 'rect' | 'circle' | 'ellipse' | 'polygon';
 
 export type RegionShape =
@@ -23,6 +27,7 @@ export interface ImageTemplate {
   category: string;
   viewBox: string;
   regions: Region[];
+  colors?: string[]; // per-image canonical colors; index = colorNumber - 1
 }
 
 export interface ColorSlot {
@@ -31,16 +36,31 @@ export interface ColorSlot {
   name: string;
 }
 
+export type CategoryKey =
+  | 'animals'
+  | 'nature'
+  | 'food'
+  | 'mythical'
+  | 'architecture'
+  | 'space'
+  | 'vehicles'
+  | 'fun'
+  | 'mandalas';
+
 export interface Level {
   id: number;
+  categoryLevelNumber?: number;
   name: string;
   emoji: string;
+  category: CategoryKey;
   difficulty: Difficulty;
+  mode: LevelMode;
   colorSlots: ColorSlot[];
   template: ImageTemplate;
+  description?: string;
 }
 
-export type GameScreen = 'menu' | 'levelSelect' | 'playing' | 'levelComplete';
+export type GameScreen = 'menu' | 'levelSelect' | 'playing' | 'levelComplete' | 'gameOver' | 'privacy' | 'terms';
 
 export interface GameState {
   screen: GameScreen;
@@ -53,11 +73,15 @@ export interface GameState {
   flashRegion: string | null;
   hintsLeft: number;
   hintRegion: string | null;
+  levelStars: Record<number, number>;
+  lastEarnedStars?: number;
 }
 
 export type GameAction =
   | { type: 'GO_MENU' }
   | { type: 'GO_LEVEL_SELECT' }
+  | { type: 'GO_PRIVACY' }
+  | { type: 'GO_TERMS' }
   | { type: 'START_LEVEL'; levelId: number }
   | { type: 'SELECT_COLOR'; colorNumber: number }
   | { type: 'FILL_REGION'; regionId: string; colorNumber: number; correct: boolean }
@@ -65,4 +89,5 @@ export type GameAction =
   | { type: 'CLEAR_FLASH' }
   | { type: 'USE_HINT'; regionId: string }
   | { type: 'CLEAR_HINT' }
-  | { type: 'LOAD_SAVED'; saved: { currentLevel: number; unlockedLevels: number; score: number } };
+  | { type: 'GAME_OVER' }
+  | { type: 'LOAD_SAVED'; saved: { currentLevel: number; unlockedLevels: number; score: number; levelStars?: Record<number, number>; hintsLeft?: number } };

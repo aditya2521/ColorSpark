@@ -2716,13 +2716,13 @@ SPEC CHECKSUMS:
   ExpoGL: 4f9233cd8fcbbd4d4eab2665d1fa600362eeae09
   ExpoKeepAwake: c26f14275017370cc8a4b7b43a0e23361f2053a5
   ExpoLogBox: 8a3cfa2897e088083cd49fc1ff7fdb2de4385547
-  ExpoModulesCore: 2b37004bccb3cd19b404199d6860710b94864a52
+  ExpoModulesCore: 17b9debbd90384d4a1a07d86daccd2f992ad6d81
   ExpoModulesJSI: b20fefa4cdd9097e7e6b715466d1900b8c5d4711
   ExpoModulesWorklets: b21b8f233b5fd71ca74327217601fa4ead9ddaaf
   ExpoModulesWorkletsAdapter: 6b3dffb299973f4f2b1a96738aa2cb46987b18e1
   EXUpdatesInterface: 92d2aa5194b6fb93ca8ab749db75665cb28b2e60
   FBLazyVector: b3e7ad108f0d882e30445c5527d774e3fd432f3d
-  hermes-engine: ac1d71c32d970a7e25c75d4f952c97595fdc20a9
+  hermes-engine: 72e07c5f37cb143680d7de71e63c51b164793a41
   RCTDeprecation: 2a74a2c57675e64419bd89078efde81f7c1de90b
   RCTRequired: 30451112e6fef4e6f31b4e7eee0845156e35e4b0
   RCTSwiftUI: 5aaf0b07e747ba749dc6acc94d8bd41eea4b570f
@@ -2805,4 +2805,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1d51ce26d0441a2c51f3950a2fc76b59b1c7ea46
 
-COCOAPODS: 1.17.0
+COCOAPODS: 1.16.2

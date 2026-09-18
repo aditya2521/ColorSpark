@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Level } from '../types';
 import ColoringCanvas from '../components/canvas/ColoringCanvas';
@@ -11,7 +11,6 @@ interface GameSceneProps {
   flashRegion: string | null;
   hintRegion: string | null;
   selectedColorNumber: number | null;
-  score: number;
   wrongAttempts: number;
   hintsLeft: number;
   soundEnabled: boolean;
@@ -28,7 +27,6 @@ export default function GameScene({
   flashRegion,
   hintRegion,
   selectedColorNumber,
-  score,
   wrongAttempts,
   hintsLeft,
   soundEnabled,
@@ -75,7 +73,6 @@ export default function GameScene({
         level={level}
         filledCount={filledCount}
         totalRegions={totalRegions}
-        score={score}
         wrongAttempts={wrongAttempts}
         hintsLeft={hintsLeft}
         soundEnabled={soundEnabled}
@@ -89,6 +86,7 @@ export default function GameScene({
         filledRegions={filledRegions}
         flashRegion={flashRegion}
         hintRegion={hintRegion}
+        selectedColorNumber={selectedColorNumber}
         onRegionPress={onRegionPress}
         onZoomIn={() => {}}
         onZoomOut={() => {}}
@@ -96,25 +94,34 @@ export default function GameScene({
         zoomControls={zoomControls}
       />
 
-      {/* Zoom bar — below canvas, above palette, never overlaps image */}
-      <View style={styles.zoomBar}>
-        <TouchableOpacity onPress={() => zoomOutRef.current()} style={styles.zoomBtn} activeOpacity={0.7}>
-          <Text style={styles.zoomBtnText}>−</Text>
-        </TouchableOpacity>
-        <View style={styles.zoomDivider} />
-        <TouchableOpacity onPress={() => resetRef.current()} style={styles.zoomReset} activeOpacity={0.7}>
-          <Text style={styles.zoomResetText}>FIT</Text>
-        </TouchableOpacity>
-        <View style={styles.zoomDivider} />
-        <TouchableOpacity onPress={() => zoomInRef.current()} style={styles.zoomBtn} activeOpacity={0.7}>
-          <Text style={styles.zoomBtnText}>+</Text>
-        </TouchableOpacity>
+      {/* Floating Modern Zoom Pill with + and - */}
+      <View style={styles.zoomBarContainer}>
+        <View style={styles.zoomCapsule}>
+          <TouchableOpacity
+            onPress={() => zoomOutRef.current()}
+            style={styles.zoomActionBtn}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.zoomMinusIcon}>−</Text>
+          </TouchableOpacity>
+
+          <View style={styles.zoomDivider} />
+
+          <TouchableOpacity
+            onPress={() => zoomInRef.current()}
+            style={styles.zoomActionBtn}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.zoomPlusIcon}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ColorPalette
         colorSlots={level.colorSlots}
         selectedNumber={selectedColorNumber}
         filledNumbers={filledNumbers}
+        mode={level.mode}
         onSelect={onColorSelect}
       />
     </View>
@@ -122,45 +129,53 @@ export default function GameScene({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#ffffff' },
+  container: { flex: 1, backgroundColor: '#FFFFFF' },
 
-  zoomBar: {
+  zoomBarContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 5,
+    backgroundColor: '#FFFFFF',
+  },
+  zoomCapsule: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.95)',
-    borderTopWidth: 1,
-    borderTopColor: '#EEE',
-    paddingVertical: 4,
-    gap: 0,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 22,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOpacity: 0.07,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
+    gap: 2,
   },
-  zoomBtn: {
-    paddingHorizontal: 28,
-    paddingVertical: 6,
+  zoomActionBtn: {
+    width: 44,
+    height: 34,
+    borderRadius: 18,
+    backgroundColor: '#F8FAFC',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  zoomBtnText: {
-    fontSize: 24,
-    fontWeight: '300',
-    color: '#444',
-    lineHeight: 28,
+  zoomMinusIcon: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#334155',
+    lineHeight: 24,
+  },
+  zoomPlusIcon: {
+    fontSize: 21,
+    fontWeight: '800',
+    color: '#334155',
+    lineHeight: 23,
   },
   zoomDivider: {
-    width: 1,
-    height: 22,
-    backgroundColor: '#DDD',
-  },
-  zoomReset: {
-    paddingHorizontal: 20,
-    paddingVertical: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  zoomResetText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#9333EA',
-    letterSpacing: 0.5,
+    width: 1.5,
+    height: 18,
+    backgroundColor: '#E2E8F0',
   },
 });
